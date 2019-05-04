@@ -28,12 +28,18 @@ export default class App extends React.Component {
       );
   }
 
-  fetchWeather(lat = 25, lon = 25){
+  fetchWeather(lat, lon){
     fetch(
       `http://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&APPID=${API_KEY}&units=metric`
     )
     .then(res => res.json())
-    .then(json => { console.log(json)
+    .then(json => { 
+      console.log(json);
+      this.setState({
+        weatherCondition: json.weather[0].main,
+        temperatur: json.main.temp,
+        isLoading: false,
+      })
     })
   }
 
@@ -46,7 +52,7 @@ export default class App extends React.Component {
         {isLoading ? (
           <Text> Fetching the Weather </Text>
         ) : (
-          <Weather />
+          <Weather weather={this.state.weatherCondition} temperature={this.state.temperatur} />
         )}
       </View>
     );
